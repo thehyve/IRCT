@@ -254,6 +254,14 @@
             <scope>test</scope>
 		</dependency>
 
+		<!-- hibernate-core for naming strategy -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.2.13.Final</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>

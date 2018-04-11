@@ -51,6 +51,7 @@
          <property name="hibernate.show_sql" value="false" />
          <property name="hibernate.format_sql" value="false" />
          <property name="hibernate.connection.autocommit" value="false" />
+         <property name="hibernate.physical_naming_strategy" value="edu.harvard.hms.dbmi.bd2k.irct.cl.util.HibernatePrefixNamingStrategy" />
       </properties>
    </persistence-unit>
 </persistence>

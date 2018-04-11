@@ -55,8 +55,10 @@ public class SessionFilter implements Filter {
 		logger.debug("doFilter() Starting");
 		HttpServletRequest request = (HttpServletRequest) req;
 
-		// If processing URL /securityService/*, we are creating a session/secureSession
-		if (request.getRequestURI().endsWith("/securityService/startSession") || request.getRequestURI().endsWith("/securityService/createKey")) {
+		// If processing URL /securityService/*, we are creating a session/secureSession; ignore CORS preflight calls
+		if (	request.getRequestURI().endsWith("/securityService/startSession") ||
+				request.getRequestURI().endsWith("/securityService/createKey") ||
+				request.getMethod().equals("OPTIONS")) {
 			// Do Nothing
 			logger.debug("doFilter() securityService URL is NOT filtered.");
 		} else {

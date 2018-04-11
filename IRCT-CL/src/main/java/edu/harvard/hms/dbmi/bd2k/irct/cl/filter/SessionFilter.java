@@ -36,7 +36,7 @@ public class SessionFilter implements Filter {
 	@javax.annotation.Resource(mappedName = "java:global/client_id")
 	private String clientId;
 	// todo: get this from the openid-configuration
-	@javax.annotation.Resource(mappedName = "java:global/jkws_uri")
+	@javax.annotation.Resource(mappedName = "java:global/jwks_uri")
 	private String jwksUri;
 	@javax.annotation.Resource(mappedName = "java:global/userField")
 	private String userField;

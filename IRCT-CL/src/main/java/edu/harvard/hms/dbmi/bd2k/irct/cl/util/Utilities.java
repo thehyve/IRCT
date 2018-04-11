@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 package edu.harvard.hms.dbmi.bd2k.irct.cl.util;
 
+import com.auth0.jwk.*;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
@@ -33,6 +34,9 @@ import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.interfaces.RSAPublicKey;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +47,19 @@ import java.util.Map;
 public class Utilities {
 
 	private static Logger logger = Logger.getLogger(Utilities.class);
+
+	private static JwkProvider jwkProvider = null;
+	private static String jwksUri = "";
+	private static JwkProvider getJwkProvider(String pJwksUri) throws MalformedURLException {
+		if (!jwksUri.equals(pJwksUri) || jwkProvider == null) {
+			jwksUri = pJwksUri;
+			jwkProvider = new GuavaCachedJwkProvider(new UrlJwkProvider(new URL(jwksUri)));
+		}
+		return jwkProvider;
+	}
+
+
+
 
 	/**
 	 * Returns all the first values from a MultiValue Map
@@ -87,13 +104,13 @@ public class Utilities {
 	/**
 	 * extract specific user field from JWT token
 	 * @param req
-	 * @param clientSecret
+	 * @param pJwksUri
 	 * @param userField specifies which user field is going to be extracted from JWT token
 	 * @return
 	 * @throws NotAuthorizedException
 	 */
-	public static String extractEmailFromJWT(HttpServletRequest req, String clientSecret, String userField) {
-		logger.debug("extractEmailFromJWT() with secret:"+clientSecret);
+	public static String extractEmailFromJWT(HttpServletRequest req, String pJwksUri, String userField) {
+		logger.debug("extractEmailFromJWT() with jwks URI:" + pJwksUri);
 
 		//No point in doing anything if there's no userField
         if (userField == null){
@@ -112,28 +129,22 @@ public class Utilities {
 		DecodedJWT jwt = null;
 		try {
 			logger.debug("validateAuthorizationHeader() validating with un-decoded secret.");
-			jwt = com.auth0.jwt.JWT.require(Algorithm
-					.HMAC256(clientSecret
-							.getBytes("UTF-8")))
+			jwt = com.auth0.jwt.JWT.decode(tokenString);
+			Jwk jwk = getJwkProvider(pJwksUri).get(jwt.getKeyId());
+			RSAPublicKey signingPubKey = (RSAPublicKey) jwk.getPublicKey();
+
+			if (signingPubKey == null || !jwk.getAlgorithm().equals("RS256")) {
+				throw new NotAuthorizedException("Problematic public key = " + signingPubKey + ", algo = " + jwk.getAlgorithm());
+			}
+
+			jwt = com.auth0.jwt.JWT
+					.require(Algorithm.RSA256(signingPubKey, null))
 					.build()
 					.verify(tokenString);
-		} catch (UnsupportedEncodingException e){
-			logger.error("extractEmailFromJWT() getting bytes for initialize jwt token algorithm error: " + e.getMessage());
-			throw new NotAuthorizedException("Token is invalid, please request a new one");
-		} catch (JWTVerificationException e) {
-			try{
-				jwt = com.auth0.jwt.JWT.require(Algorithm
-						.HMAC256(Base64.decodeBase64(clientSecret
-								.getBytes("UTF-8"))))
-						.build()
-						.verify(tokenString);
-			} catch (UnsupportedEncodingException ex){
-				logger.error("extractEmailFromJWT() getting bytes for initialize jwt token algorithm error: " + e.getMessage());
-				throw new NotAuthorizedException("Token is invalid, please request a new one");
-			} catch (JWTVerificationException ex) {
-				logger.error("extractEmailFromJWT() token is invalid after tried with another algorithm: " + e.getMessage());
-				throw new NotAuthorizedException("Token is invalid, please request a new one");
-			}
+
+		} catch (JWTVerificationException | MalformedURLException | JwkException e){
+			logger.error("extractEmailFromJWT() error: " + e.getMessage());
+			throw new NotAuthorizedException("Token is invalid, please request a new one: " + e.getMessage());
 		}
 
 		logger.debug("extractEmailFromJWT() validation is successful.");

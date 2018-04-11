@@ -29,6 +29,9 @@ public class SessionFilter implements Filter {
 	@Inject
 	private IRCTApplication irctApp;
 
+	@javax.annotation.Resource(mappedName = "java:global/jkws_uri")
+	private String jwksUri;
+
 	@javax.annotation.Resource(mappedName = "java:global/userField")
 	private String userField;
 
@@ -86,7 +89,7 @@ public class SessionFilter implements Filter {
                             //Get information from token introspection endpoint in 2.0
                             user = sc.ensureUserExists(Utilities.extractUserFromTokenIntrospection((HttpServletRequest) req, this.userField, irctApp.getToken_introspection_url(), irctApp.getToken_introspection_token()));
                         } else{
-    						user = sc.ensureUserExists(Utilities.extractEmailFromJWT((HttpServletRequest) req, irctApp.getClientSecret(), this.userField));
+    						user = sc.ensureUserExists(Utilities.extractEmailFromJWT((HttpServletRequest) req, irctApp.getClientSecret(), this.jwksUri, this.userField));
                         }
 				}
 

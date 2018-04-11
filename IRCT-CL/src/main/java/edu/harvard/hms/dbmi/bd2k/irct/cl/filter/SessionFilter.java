@@ -35,8 +35,9 @@ public class SessionFilter implements Filter {
 
 	@javax.annotation.Resource(mappedName = "java:global/client_id")
 	private String clientId;
-	@javax.annotation.Resource(mappedName = "java:global/client_secret")
-	private String clientSecret;
+	// todo: get this from the openid-configuration
+	@javax.annotation.Resource(mappedName = "java:global/jkws_uri")
+	private String jwksUri;
 	@javax.annotation.Resource(mappedName = "java:global/userField")
 	private String userField;
 
@@ -93,7 +94,7 @@ public class SessionFilter implements Filter {
 					if (user == null
 							|| user.getToken() == null
 							|| !user.getToken().equals(tokenString))
-						user = sc.ensureUserExists(Utilities.extractEmailFromJWT((HttpServletRequest) req, this.clientSecret, this.userField));
+						user = sc.ensureUserExists(Utilities.extractEmailFromJWT((HttpServletRequest) req, this.jwksUri, this.userField));
 				}
 
 				if (user == null)

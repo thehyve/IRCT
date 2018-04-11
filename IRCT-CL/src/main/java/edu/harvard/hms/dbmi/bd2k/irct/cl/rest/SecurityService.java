@@ -55,8 +55,9 @@ public class SecurityService implements Serializable {
 	@javax.annotation.Resource(mappedName ="java:global/client_id")
 	private String clientId;
 
-	@javax.annotation.Resource(mappedName ="java:global/client_secret")
-	private String clientSecret;
+	// todo: get this from the openid-configuration
+	@javax.annotation.Resource(mappedName ="java:global/jwks_uri")
+	private String jkwsUri;
 
 	@javax.annotation.Resource(mappedName ="java:global/userField")
 	private String userField;
@@ -74,7 +75,7 @@ public class SecurityService implements Serializable {
 
 		try {
 			User userObject = sc.ensureUserExists(Utilities
-					.extractEmailFromJWT(req, this.clientSecret, this.userField));
+					.extractEmailFromJWT(req, this.jkwsUri, this.userField));
 			logger.debug("/createKey user exists");
 			userObject.setToken(Utilities.extractToken(req));
 

@@ -1,0 +1,13 @@
+# WildFly status files
+*.deployed
+*.undeployed
+*.failed
+*.dodeploy
+*.skipdeploy
+*.isdeploying
+*.isundeploying
+*.pending
+
+# WildFly config file history
+standalone_xml_history
+

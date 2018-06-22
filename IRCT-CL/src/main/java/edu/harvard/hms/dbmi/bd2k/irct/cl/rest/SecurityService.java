@@ -46,14 +46,14 @@ public class SecurityService implements Serializable {
 	@Inject
 	private HttpSession session;
 
-	@javax.annotation.Resource(mappedName ="java:global/redirect_on_success")
-	private String redirectOnSuccess;
+//	@javax.annotation.Resource(mappedName ="java:global/redirect_on_success")
+//	private String redirectOnSuccess;
+//
+//	@javax.annotation.Resource(mappedName ="java:global/domain")
+//	private String domain;
 
-	@javax.annotation.Resource(mappedName ="java:global/domain")
-	private String domain;
-
-	@javax.annotation.Resource(mappedName ="java:global/client_id")
-	private String clientId;
+//	@javax.annotation.Resource(mappedName ="java:global/client_id")
+//	private String clientId;
 
 	// todo: get this from the openid-configuration
 	@javax.annotation.Resource(mappedName ="java:global/jwks_uri")

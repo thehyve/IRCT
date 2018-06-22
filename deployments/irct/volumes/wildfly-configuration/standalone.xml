@@ -316,7 +316,7 @@
                 <simple name="java:global/domain" value="${env.IRCT_OIDC_ADDR:keycloak}" type="java.lang.String"/>
                 <simple name="java:global/redirect_on_success" value="${env.IRCT_OIDC_REDIRECT:/IRCT-UI/token.html}" type="java.lang.String"/>
                 <simple name="java:global/client_id" value="${env.IRCT_OIDC_CLIENT_ID:irct}" type="java.lang.String"/>
-                <simple name="java:global/userField" value="${env.IRCT_OIDC_USER_FIELD:email}" type="java.lang.String"/>
+                <simple name="java:global/userField" value="${env.IRCT_OIDC_USER_FIELD:preferred_username}" type="java.lang.String"/>
                 <simple name="java:global/KeyTimeOutInMinutes" value="${env.IRCT_KEY_TIMEOUT:720}" type="java.lang.String"/>
                 <simple name="java:global/whitelist_config_file" value="${env.IRCT_WHITELIST_FILE:false}" type="java.lang.String"/>
                 <simple name="java:global/resultDataFolder" value="${env.IRCT_RESULT_DATA_FOLDER:scratch/irct}" type="java.lang.String"/>

@@ -116,7 +116,7 @@ public class SessionFilter implements Filter {
 				// TODO DI-896 change. Since the user above gets created without an actual token, we need 
 				// to re-extract the token, from the header and parse it and place it inside the user object, 
 				// for future playtime.
-				if (user.getToken() == null) {
+				if (user.getToken() == null || !user.getToken().equals(tokenString)) {
 					logger.debug("doFilter() No token in user object, so let's add one.");
 					user.setToken(tokenString);
 					sc.updateUserRecord(user);

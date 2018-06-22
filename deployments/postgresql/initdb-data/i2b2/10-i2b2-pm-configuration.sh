@@ -41,4 +41,16 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -d "$I2B2_DEMO_DB_NAME" <<-E
     UPDATE i2b2pm.PM_USER_DATA SET PASSWORD = '9117d59a69dc49807671a51f10ab7f' WHERE USER_ID = 'i2b2';
     UPDATE i2b2pm.PM_USER_DATA SET PASSWORD = '9117d59a69dc49807671a51f10ab7f' WHERE USER_ID = 'demo';
     UPDATE i2b2pm.PM_USER_DATA SET PASSWORD = '7cb1ac9deab165535494d60da1d3d7e' WHERE USER_ID = 'AGG_SERVICE_ACCOUNT';
+
+    -- oidc user
+    INSERT INTO pm_user_data VALUES ('test', 'test', NULL, 'test@test.com', NULL, NOW(), NOW(), 'i2b2', 'A');
+    INSERT INTO pm_user_params VALUES (1, 'T', 'test', 'authentication_method', 'OIDC', NOW(), NOW(), 'i2b2', 'A');
+    INSERT INTO pm_user_params VALUES (2, 'T', 'test', 'oidc_jwks_uri', 'http://keycloak:8080/auth/realms/master/protocol/openid-connect/certs', NOW(), NOW(), 'i2b2', 'A');
+    INSERT INTO pm_user_params VALUES (3, 'T', 'test', 'oidc_client_id', 'i2b2-local', NOW(), NOW(), 'i2b2', 'A');
+    INSERT INTO pm_user_params VALUES (4, 'T', 'test', 'oidc_user_field', 'preferred_username', NOW(), NOW(), 'i2b2', 'A');
+    INSERT INTO pm_user_params VALUES (4, 'T', 'test', 'oidc_token_issuer', 'http://keycloak:8080/auth/realms/master', NOW(), NOW(), 'i2b2', 'A');
+
+    INSERT INTO pm_project_user_roles VALUES ('Demo', 'test', 'MANAGER', NOW(), NOW(), 'i2b2', 'A');
+    INSERT INTO pm_project_user_roles VALUES ('Demo', 'test', 'USER', NOW(), NOW(), 'i2b2', 'A');
+    INSERT INTO pm_project_user_roles VALUES ('Demo', 'test', 'DATA_OBFSC', NOW(), NOW(), 'i2b2', 'A');
 EOSQL

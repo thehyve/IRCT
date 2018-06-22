@@ -64,16 +64,17 @@ services:
       - IRCT_OIDC_REDIRECT=/IRCT-UI/token.html
       - IRCT_OIDC_CLIENT_ID=irct
       - IRCT_OIDC_CLIENT_SECRET=rCwDRtQM510Du5bYGCHfLClM8XMph95aJwNsCr6MAucIiSxGeN5pcni3QRJqlYcc
-      - IRCT_OIDC_USER_FIELD=email
+      - IRCT_OIDC_USER_FIELD=preferred_username
       - IRCT_KEY_TIMEOUT=720
       - IRCT_WHITELIST_FILE=false
-      - IRCT_RESULT_DATA_FOLDER=scratch/irct
+      - IRCT_RESULT_DATA_FOLDER=/opt/jboss/irct-results
       - IRCT_OIDC_JWKS_ADDR=http://keycloak:8080/auth/realms/master/protocol/openid-connect/certs
     volumes:
       - ../:/irct-src
       - mvn-repo:/opt/jboss/.m2/repository
       - ./irct/volumes/wildfly-configuration:/opt/jboss/wildfly/standalone/configuration
       - ./irct/volumes/wildfly-deployments:/opt/jboss/wildfly/standalone/deployments
+      - ./irct/volumes/irct-results:/opt/jboss/irct-results
 
 volumes:
   mvn-repo:

@@ -32,11 +32,17 @@ public enum I2B2OntologyRelationship implements OntologyRelationship {
 			return MODIFIER;
 		}
 	},
+	AGGREGATE {
+		public OntologyRelationship getInverse() {
+			return AGGREGATE;
+		}
+	},
 	TERM {
 		public OntologyRelationship getInverse() {
 			return TERM;
 		}
 	};
+
 	
 	public String getName() {
 		return this.name();

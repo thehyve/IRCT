@@ -15,6 +15,7 @@ BEGIN;
     userName varchar := 'demo';
     password varchar := 'demouser';
     ignoreCertificate varchar := 'false';
+    useJWT varchar := 'true';
 
     resourceImplementingInterface varchar := 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2XMLResourceImplementation';
     resourceOntology varchar := 'TREE';
@@ -61,6 +62,7 @@ BEGIN;
     insert into IRCT_resource_parameters(id, name, value) values(resourceId, 'ignoreCertificate', ignoreCertificate);
     insert into IRCT_resource_parameters(id, name, value) values(resourceId, 'clientId', auth0ClientId);
     insert into IRCT_resource_parameters(id, name, value) values(resourceId, 'namespace', auth0Domain);
+    insert into IRCT_resource_parameters(id, name, value) values(resourceId, 'useJWT', useJWT);
 
     -- INSERT RESOURCE DATATYEPS
     insert into IRCT_Resource_dataTypes(Resource_id, datatypes) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:DATETIME');
@@ -75,6 +77,7 @@ BEGIN;
     insert into IRCT_Resource_relationships(Resource_id, relationships) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2OntologyRelationship:SIBLING');
     insert into IRCT_Resource_relationships(Resource_id, relationships) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2OntologyRelationship:MODIFIER');
     insert into IRCT_Resource_relationships(Resource_id, relationships) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2OntologyRelationship:TERM');
+    insert into IRCT_Resource_relationships(Resource_id, relationships) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2OntologyRelationship:AGGREGATE');
 
     -- INSERT RESOURCE LogicalOperators
     insert into IRCT_Resource_LogicalOperator(id, logicalOperator) values(resourceId, 'AND');

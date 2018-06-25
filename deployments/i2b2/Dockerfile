@@ -12,7 +12,7 @@ ENV WILDFLY_ADMIN_PASSWORD="admin" \
 # build-time variables
 ENV JBOSS_WAR_DEPLOYMENTS="$JBOSS_HOME/standalone/deployments" \
     AXIS2_VERSION="1.7.1" \
-    AXIS2_LOGLEVEL="INFO" \
+    AXIS2_LOGLEVEL="DEBUG" \
     I2B2_SRC_DIR="/i2b2-src" \
     I2B2_SQL_DIR="/i2b2-sql" \
     I2B2_DATA_DIR="/i2b2-data" \

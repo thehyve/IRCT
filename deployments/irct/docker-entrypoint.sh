@@ -64,6 +64,24 @@ EOSQL
             'TREE'
         );
 EOSQL
+
+    # add i2b2 resource online public demo
+    psql $PSQL_PARAMS -d $IRCT_DB_NAME <<-EOSQL
+        select add_i2b2_resource(
+            'i2b2-public',
+            'http://services.i2b2.org/i2b2/services/',
+            '',
+            '',
+            '',
+            'i2b2demo',
+            'demo',
+            'demouser',
+            'false',
+            'false',
+            'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2XMLResourceImplementation',
+            'TREE'
+        );
+EOSQL
 fi
 
 # set admin password & run wildfly

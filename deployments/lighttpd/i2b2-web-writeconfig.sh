@@ -9,7 +9,7 @@ cat > "$LIGHTTPD_WEB_ROOT/i2b2-admin/i2b2_config_data.js" <<EOL
     lstDomains: [ {
         domain: "$I2B2_DOMAIN_NAME",
         name: "Domain $I2B2_DOMAIN_NAME",
-        urlCellPM: "http://wildfly-server:8080/i2b2/services/PMService/",
+        urlCellPM: "http://i2b2:8080/i2b2/services/PMService/",
         allowAnalysis: true,
         adminOnly: true,
         debug: false
@@ -25,7 +25,7 @@ cat > "$LIGHTTPD_WEB_ROOT/i2b2-client/i2b2_config_data.js" <<EOL
     lstDomains: [  {
         domain: "$I2B2_DOMAIN_NAME",
         name: "Domain $I2B2_DOMAIN_NAME",
-        urlCellPM: "http://wildfly-server:8080/i2b2/services/PMService/",
+        urlCellPM: "http://i2b2:8080/i2b2/services/PMService/",
         allowAnalysis: true,
         debug: false
     } ]
@@ -50,5 +50,5 @@ cat > "$LIGHTTPD_WEB_ROOT/index.html" <<EOL
 EOL
 
 # webclients whitelist URLs
-sed -i "s/\"http:\/\/localhost\"/\"http:\/\/wildfly-server:8080\"/" "$LIGHTTPD_WEB_ROOT/i2b2-admin/index.php"
-sed -i "s/\"http:\/\/localhost\"/\"http:\/\/wildfly-server:8080\"/" "$LIGHTTPD_WEB_ROOT/i2b2-client/index.php"
+sed -i "s/\"http:\/\/localhost\"/\"http:\/\/i2b2:8080\"/" "$LIGHTTPD_WEB_ROOT/i2b2-admin/index.php"
+sed -i "s/\"http:\/\/localhost\"/\"http:\/\/i2b2:8080\"/" "$LIGHTTPD_WEB_ROOT/i2b2-client/index.php"

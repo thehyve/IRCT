@@ -1,0 +1,37 @@
+version: '2.2'
+services:
+  lighttpd:
+    extends:
+      file: docker-compose.local.yml
+      service: lighttpd
+
+  postgresql:
+    extends:
+      file: docker-compose.local.yml
+      service: postgresql
+      
+  irct:
+    extends:
+      file: docker-compose.local.yml
+      service: irct
+    environment:
+      - IRCT_OIDC_ADDR=keycloak-dwh-test.thehyve.net
+      - IRCT_OIDC_REDIRECT=/IRCT-UI/token.html
+      - IRCT_OIDC_CLIENT_ID=i2b2
+      - IRCT_OIDC_CLIENT_SECRET=rCwDRtQM510Du5bYGCHfLClM8XMph95aJwNsCr6MAucIiSxGeN5pcni3QRJqlYcc
+      - IRCT_OIDC_USER_FIELD=preferred_username
+      - IRCT_KEY_TIMEOUT=720
+      - IRCT_WHITELIST_FILE=false
+      - IRCT_OIDC_JWKS_ADDR=https://keycloak-dwh-test.thehyve.net/auth/realms/transmart-dev/protocol/openid-connect/certs
+
+  i2b2:
+    extends:
+      file: docker-compose.local.yml
+      service: i2b2
+
+volumes:
+  mvn-repo:
+
+networks:
+  db-network:
+    driver: bridge

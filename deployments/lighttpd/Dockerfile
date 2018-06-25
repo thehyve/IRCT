@@ -19,7 +19,7 @@ USER www-data
 WORKDIR "$LIGHTTPD_WEB_ROOT"
 
 # install phpPgAdmin
-ARG POSTGRESQL_HOST_ARG="postgresql-server"
+ARG POSTGRESQL_HOST_ARG="postgresql"
 ENV POSTGRESQL_HOST="$POSTGRESQL_HOST_ARG"
 RUN wget http://downloads.sourceforge.net/phppgadmin/phpPgAdmin-5.1.tar.gz?download && \
     tar xvzf phpPgAdmin-5.1.tar.gz?download && \
@@ -32,11 +32,11 @@ RUN wget http://downloads.sourceforge.net/phppgadmin/phpPgAdmin-5.1.tar.gz?downl
 
 # install i2b2 webclient & admin tool
 ENV I2B2_WEB_DIR="$LIGHTTPD_WEB_ROOT/i2b2-webclient-repo" \
-    I2B2_VERSION="b1.7.10.003-QA" \
+    I2B2_VERSION="tags/v1.7.10.0001" \
     I2B2_DOMAIN_NAME="i2b2demo"
 RUN mkdir "$I2B2_WEB_DIR" && \
     git clone https://github.com/i2b2/i2b2-webclient.git "$I2B2_WEB_DIR" && \
-    git -C "$I2B2_WEB_DIR" checkout tags/$I2B2_VERSION  && \
+    git -C "$I2B2_WEB_DIR" checkout $I2B2_VERSION  && \
     cp -R "$I2B2_WEB_DIR" "$LIGHTTPD_WEB_ROOT/i2b2-admin" && \
     cp -R "$I2B2_WEB_DIR" "$LIGHTTPD_WEB_ROOT/i2b2-client"
 COPY i2b2-web-writeconfig.sh ./

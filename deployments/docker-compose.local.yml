@@ -1,0 +1,96 @@
+version: '2.2'
+services:
+  lighttpd:
+    build:
+      context: ./lighttpd/
+    ports:
+      - "80:80"
+    networks:
+      - db-network
+
+  postgresql:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - db-network
+    volumes:
+      - ./postgresql/initdb-data:/docker-entrypoint-initdb.d
+
+  keycloak:
+    image: jboss/keycloak:3.4.3.Final
+    depends_on:
+      - postgresql
+    environment:
+      - KEYCLOAK_USER=keycloak
+      - KEYCLOAK_PASSWORD=keycloak
+      - POSTGRES_ADDR=postgresql
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=keycloak
+      - POSTGRES_PORT_5432_TCP_ADDR=postgresql
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgresql
+    networks:
+      - db-network
+
+  irct:
+    build:
+      context: ./irct/
+    depends_on:
+      - postgresql
+    ports:
+      - "8082:8080"
+      - "9992:9990"
+    networks:
+      - db-network
+    environment:
+      - IRCT_DB_HOST=postgresql
+      - IRCT_DB_PORT=5432
+      - IRCT_DB_NAME=irct
+      - IRCT_DB_USER=irct
+      - IRCT_DB_PW=irct
+      - IRCT_OIDC_ADDR=keycloak
+      - IRCT_OIDC_REDIRECT=/IRCT-UI/token.html
+      - IRCT_OIDC_CLIENT_ID=irct
+      - IRCT_OIDC_CLIENT_SECRET=rCwDRtQM510Du5bYGCHfLClM8XMph95aJwNsCr6MAucIiSxGeN5pcni3QRJqlYcc
+      - IRCT_OIDC_USER_FIELD=preferred_username
+      - IRCT_KEY_TIMEOUT=720
+      - IRCT_WHITELIST_FILE=false
+      - IRCT_RESULT_DATA_FOLDER=/opt/jboss/irct-results
+      - IRCT_OIDC_JWKS_ADDR=http://keycloak:8080/auth/realms/master/protocol/openid-connect/certs
+      - WILDFLY_ADMIN_PASSWORD=admin
+    volumes:
+      - ../:/irct-src
+      - mvn-repo:/opt/jboss/.m2/repository
+
+  i2b2:
+    build:
+      context: ./i2b2/
+    depends_on:
+      - postgresql
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+    networks:
+      - db-network
+    environment:
+      - I2B2_DB_HOST=postgresql
+      - I2B2_DB_PORT=5432
+      - I2B2_DB_NAME=i2b2
+      - I2B2_DB_USER=i2b2
+      - I2B2_DB_PW=i2b2
+      - WILDFLY_ADMIN_PASSWORD=admin
+      - I2B2_DOMAIN_NAME=i2b2demo
+
+volumes:
+  mvn-repo:
+
+networks:
+  db-network:
+    driver: bridge

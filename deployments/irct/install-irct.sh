@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-set -e
 # download, compile, install and deploy IRCT
 # this script also supports updates, simply run it again
 
 # enable maven 3.5
 source /opt/rh/rh-maven35/enable
+set -Eeuo pipefail
 
 # cleanup & prevent deployment in wildfly while building
 if [ -f "$IRCT_WAR" ]; then

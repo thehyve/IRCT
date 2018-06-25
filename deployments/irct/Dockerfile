@@ -43,7 +43,8 @@ RUN wget -O "$JBOSS_WAR_DEPLOYMENTS/$PG_JDBC_JAR" \
     "http://central.maven.org/maven2/org/postgresql/postgresql/9.4.1212/postgresql-9.4.1212.jar" && \
     touch "$JBOSS_WAR_DEPLOYMENTS/$PG_JDBC_JAR.dodeploy"
 
-RUN mkdir -p /opt/jboss/.m2/repository
+RUN mkdir -p /opt/jboss/.m2/repository && \
+    mkdir -p "$IRCT_RESULT_DATA_FOLDER"
 VOLUME  $IRCT_SRC_DIR \
         $JBOSS_HOME/.m2/repository
 

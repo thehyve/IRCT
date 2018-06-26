@@ -187,12 +187,6 @@ public class I2B2XMLResourceImplementation
 		return "i2b2XML";
 	}
 
-	// todo: relationships in resource is not general declariton: it is the supported relationships of the root node
-	// todo: add the data type
-	// todo: add the relationships
-	// todo: cache below project level
-	// child depth should work: should be added to nodes
-	// todo : make depth call work, then get the tree cache working
 	@Override
 	public List<Entity> getPathRelationship(Entity path, OntologyRelationship relationship, User user)
 			throws ResourceInterfaceException {
@@ -297,7 +291,6 @@ public class I2B2XMLResourceImplementation
                 }
                 ontCell = createOntCell(pathComponents[2], user.getName(), user.getToken());
                 ConceptsType conceptsType = ontCell.getTermInfo(client, true, resourcePath, true, -1, true, "core");
-                // todo: send back WAIT -- use the attributes in response ??? instaead of  n bdsbdgsjk
                 entities = convertConceptsTypeToEntities(basePath, conceptsType);
 //                ADD method to parse concepts and embed the aggregates in the entity
                 // todo: missing value into query as well
@@ -480,6 +473,9 @@ public class I2B2XMLResourceImplementation
 					// FIRST
 					if (panels.isEmpty() && currentPanel.getItem().isEmpty()) {
 						currentPanel.getItem().add(itemType);
+						if (whereClause.getLogicalOperator() == LogicalOperator.NOT) {
+							currentPanel.setInvert(1);
+						}
 					} else if (whereClause.getLogicalOperator() == LogicalOperator.AND) {
 						panels.add(currentPanel);
 						currentPanel = createPanel(panelCount++);
@@ -491,8 +487,8 @@ public class I2B2XMLResourceImplementation
 						currentPanel = createPanel(panelCount++);
 						currentPanel.getItem().add(itemType);
 						currentPanel.setInvert(1);
-						panels.add(currentPanel);
-						currentPanel = createPanel(panelCount++);
+//						panels.add(currentPanel);
+//						currentPanel = createPanel(panelCount++);
 					}
 				}
 			}

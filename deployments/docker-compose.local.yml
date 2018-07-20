@@ -68,8 +68,7 @@ services:
       - mvn-repo:/opt/jboss/.m2/repository
 
   i2b2:
-    build:
-      context: ./i2b2/
+    image: medco/i2b2:latest
     ports:
       - "8080:8080"
       - "9990:9990"

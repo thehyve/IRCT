@@ -73,6 +73,7 @@ public enum I2B2DataType implements DataType {
 		return new String(bytes, StandardCharsets.UTF_16).trim();
 	}
 
+	// todo: put proper patterns
 	@Override
 	public Pattern getPattern() {
 		return Pattern.compile("^.*$", Pattern.CASE_INSENSITIVE);

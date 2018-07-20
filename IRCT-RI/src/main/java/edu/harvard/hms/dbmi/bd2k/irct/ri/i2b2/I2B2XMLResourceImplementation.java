@@ -108,12 +108,6 @@ public class I2B2XMLResourceImplementation
 
 	protected ResourceState resourceState;
 
-	// tree cache: it is per project
-	// hashmap containing the nodes, key is the PUI that children with depth are being requested, value is array/list of results
-	// it should be constructed in a way that depth will match
-	// also it should be done per project, because user will have access or not according to proejct (so always make query for project!)
-	// how to remember which user has access to which project? check the project id in the request
-
 	@Override
 	public void setup(Map<String, String> parameters) throws ResourceInterfaceException {
 
@@ -394,6 +388,56 @@ public class I2B2XMLResourceImplementation
 		return entities;
 	}
 
+	/**
+	 *
+	 * @param panels i2b2-format panels
+	 * @param query query from which panels are to be extracted
+	 * @return the project ID
+	 * @throws DatatypeConfigurationException
+	 */
+	protected String generatePanelsAndExtractProjectId(List<PanelType> panels, Query query) throws DatatypeConfigurationException {
+		String projectId = "";
+		int panelCount = 1;
+		PanelType currentPanel = createPanel(panelCount);
+
+		for (ClauseAbstract clause : query.getClauses().values()) {
+			if (clause instanceof WhereClause) {
+				// Get the projectId if it isn't already set
+				if (projectId.equals("")) {
+					String[] pathComponents = ((WhereClause) clause).getField().getPui().split("/");
+					projectId = pathComponents[2];
+				}
+
+				WhereClause whereClause = (WhereClause) clause;
+				ItemType itemType = createItemTypeFromWhereClause(whereClause);
+
+				// FIRST
+				if (panels.isEmpty() && currentPanel.getItem().isEmpty()) {
+					currentPanel.getItem().add(itemType);
+					if (whereClause.getLogicalOperator() == LogicalOperator.NOT) {
+						currentPanel.setInvert(1);
+					}
+				} else if (whereClause.getLogicalOperator() == LogicalOperator.AND) {
+					panels.add(currentPanel);
+					currentPanel = createPanel(panelCount++);
+					currentPanel.getItem().add(itemType);
+				} else if (whereClause.getLogicalOperator() == LogicalOperator.OR) {
+					currentPanel.getItem().add(itemType);
+				} else if (whereClause.getLogicalOperator() == LogicalOperator.NOT) {
+					panels.add(currentPanel);
+					currentPanel = createPanel(panelCount++);
+					currentPanel.getItem().add(itemType);
+					currentPanel.setInvert(1);
+				}
+			}
+		}
+		if (currentPanel.getItem().size() != 0) {
+			panels.add(currentPanel);
+		}
+
+		return projectId;
+	}
+
 	@Override
 	public Result runQuery(User user, Query query, Result result) throws ResourceInterfaceException {
 
@@ -451,50 +495,9 @@ public class I2B2XMLResourceImplementation
 
 		// Create the query
 		ArrayList<PanelType> panels = new ArrayList<PanelType>();
-		int panelCount = 1;
 
 		try {
-			PanelType currentPanel = createPanel(panelCount);
-
-			for (ClauseAbstract clause : query.getClauses().values()) {
-				if (clause instanceof WhereClause) {
-					// Get the projectId if it isn't already set
-					if (projectId.equals("")) {
-						String[] pathComponents = ((WhereClause) clause).getField().getPui().split("/");
-						projectId = pathComponents[2];
-					}
-
-					// when getting the result, the project ID is needed to make PDO query with dynamic authentication
-					result.getMetaData().put("projectId", projectId);
-
-					WhereClause whereClause = (WhereClause) clause;
-					ItemType itemType = createItemTypeFromWhereClause(whereClause);
-
-					// FIRST
-					if (panels.isEmpty() && currentPanel.getItem().isEmpty()) {
-						currentPanel.getItem().add(itemType);
-						if (whereClause.getLogicalOperator() == LogicalOperator.NOT) {
-							currentPanel.setInvert(1);
-						}
-					} else if (whereClause.getLogicalOperator() == LogicalOperator.AND) {
-						panels.add(currentPanel);
-						currentPanel = createPanel(panelCount++);
-						currentPanel.getItem().add(itemType);
-					} else if (whereClause.getLogicalOperator() == LogicalOperator.OR) {
-						currentPanel.getItem().add(itemType);
-					} else if (whereClause.getLogicalOperator() == LogicalOperator.NOT) {
-						panels.add(currentPanel);
-						currentPanel = createPanel(panelCount++);
-						currentPanel.getItem().add(itemType);
-						currentPanel.setInvert(1);
-//						panels.add(currentPanel);
-//						currentPanel = createPanel(panelCount++);
-					}
-				}
-			}
-			if (currentPanel.getItem().size() != 0) {
-				panels.add(currentPanel);
-			}
+			projectId = generatePanelsAndExtractProjectId(panels, query);
 		} catch (DatatypeConfigurationException e) {
 			result.setResultStatus(ResultStatus.ERROR);
 			result.setMessage("runQuery() DatatypeConfigurationException:"+e.getMessage());
@@ -502,6 +505,9 @@ public class I2B2XMLResourceImplementation
 			result.setResultStatus(ResultStatus.ERROR);
 			result.setMessage("runQuery() Exception:"+e.getMessage());
 		}
+
+		// when getting the result, the project ID is needed to make PDO query with dynamic authentication
+		result.getMetaData().put("projectId", projectId);
 
 		ResultOutputOptionListType roolt = new ResultOutputOptionListType();
 		ResultOutputOptionType root = new ResultOutputOptionType();
@@ -1368,7 +1374,7 @@ public class I2B2XMLResourceImplementation
 				true, "core");
 	}
 
-	private CRCCell createCRCCell(String projectId, String userName, String jwt) throws JAXBException {
+	protected CRCCell createCRCCell(String projectId, String userName, String jwt) throws JAXBException {
 		if (this.useProxy) {
 			crcCell.setupConnection(this.resourceURL, this.domain, userName, "", projectId, this.useProxy,
 					this.proxyURL + "/QueryToolService");
@@ -1379,7 +1385,7 @@ public class I2B2XMLResourceImplementation
 		return crcCell;
 	}
 
-	private ONTCell createOntCell(String projectId, String userName, String jwt) throws JAXBException {
+	protected ONTCell createOntCell(String projectId, String userName, String jwt) throws JAXBException {
 		if (this.useProxy) {
 			ontCell.setupConnection(this.resourceURL, this.domain, "", "", projectId, this.useProxy,
 					this.proxyURL + "/OntologyService");
@@ -1390,7 +1396,7 @@ public class I2B2XMLResourceImplementation
 		return ontCell;
 	}
 
-	private PMCell createPMCell(String userName, String jwt) throws JAXBException {
+	protected PMCell createPMCell(String userName, String jwt) throws JAXBException {
 		if (this.useProxy) {
 			pmCell.setupConnection(this.resourceURL, this.domain, "", "", "", this.useProxy,
 					this.proxyURL + "/PMService");

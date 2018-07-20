@@ -54,6 +54,10 @@ BEGIN
   insert into IRCT_resource_parameters(id, name, value) values(resourceId, 'useJWT', useJWT);
 
   -- INSERT RESOURCE DATATYEPS
+  insert into IRCT_Resource_dataTypes(Resource_id, datatypes) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT');
+  insert into IRCT_Resource_dataTypes(Resource_id, datatypes) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_NUMERIC');
+  insert into IRCT_Resource_dataTypes(Resource_id, datatypes) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_ENUM');
+  insert into IRCT_Resource_dataTypes(Resource_id, datatypes) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_STRING');
   insert into IRCT_Resource_dataTypes(Resource_id, datatypes) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:DATETIME');
   insert into IRCT_Resource_dataTypes(Resource_id, datatypes) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:DATE');
   insert into IRCT_Resource_dataTypes(Resource_id, datatypes) values(resourceId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:INTEGER');
@@ -75,6 +79,10 @@ BEGIN
 
   -- CONTAINS PREDICATE
   insert into IRCT_PredicateType(id, defaultPredicate, description, displayName, name) values(containsId, true, 'Contains value', 'Contains', 'CONTAINS');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(containsId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(containsId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_NUMERIC');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(containsId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_ENUM');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(containsId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_STRING');
   insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(containsId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:STRING');
   insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(containsId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:INTEGER');
   insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(containsId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:FLOAT');
@@ -86,6 +94,10 @@ BEGIN
   insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainModifierId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:STRING');
   insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainModifierId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:INTEGER');
   insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainModifierId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:FLOAT');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainModifierId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainModifierId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_NUMERIC');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainModifierId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_ENUM');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainModifierId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_STRING');
 
   insert into IRCT_Field(id, description, name, path, relationship, required) values(modifier_FieldId, 'Constrain by a modifier of this entity', 'Modifier', 'MODIFIER_KEY', 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2OntologyRelationship:MODIFIER', true);
 
@@ -98,6 +110,9 @@ BEGIN
   insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainValueId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:STRING');
   insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainValueId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:INTEGER');
   insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainValueId, 'edu.harvard.hms.dbmi.bd2k.irct.model.resource.PrimitiveDataType:FLOAT');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainValueId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_NUMERIC');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainValueId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_ENUM');
+  insert into IRCT_PredicateType_dataTypes(PredicateType_id, dataTypes) values(constrainValueId, 'edu.harvard.hms.dbmi.bd2k.irct.ri.i2b2.I2B2DataType:CONCEPT_STRING');
 
   insert into IRCT_Field(id, description, name, path, relationship, required) values(operator_ConstrainValueId, 'Operator', 'Operator', 'OPERATOR', null, true);
   insert into IRCT_Field_permittedValues(Field_Id, permittedValues) values(operator_ConstrainValueId, 'EQ');

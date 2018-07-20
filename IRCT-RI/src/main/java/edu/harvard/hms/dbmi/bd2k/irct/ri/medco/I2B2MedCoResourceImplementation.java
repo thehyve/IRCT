@@ -53,7 +53,6 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
     /**
      * I2b2 instance that should serve the ontology requests.
      */
-//    protected String ontologyURL;
 
     public I2B2MedCoResourceImplementation() {
         super();
@@ -66,13 +65,7 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
         super.setup(parameters);
         this.medcoCellsURL.addAll(Arrays.asList(this.resourceURL.split(SEPARATOR)));
         this.domains.addAll(Arrays.asList(this.domain.split(SEPARATOR)));
-        // first entry used for ontology
-
-//        if (!parameters.keySet().contains("ontologyURL")) {
-//            throw new ResourceInterfaceException("Missing mandatory parameter.");
-//        }
-//
-//        this.ontologyURL = parameters.get("ontologyURL");
+        // first entry used for ontology querying
     }
 
     /**
@@ -113,9 +106,9 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
     protected CRCCell createMedCoCell(int resourceURLIdx, String projectId, String userName, String jwt) {
         if (this.useProxy) {
             crcCell.setupConnection(this.medcoCellsURL.get(resourceURLIdx), this.domains.get(resourceURLIdx), userName,
-                    "", projectId, this.useProxy, this.proxyURL + "/MedCoService");
+                    "", projectId, this.useProxy, this.proxyURL + "/MedCoQueryService");
         } else {
-            crcCell.setupConnection(this.medcoCellsURL.get(resourceURLIdx) + "MedCoService/", this.domains.get(resourceURLIdx),
+            crcCell.setupConnection(this.medcoCellsURL.get(resourceURLIdx) + "MedCoQueryService/", this.domains.get(resourceURLIdx),
                     this.useJWT ? userName : this.userName, this.useJWT ? jwt : this.password, projectId, false, null);
         }
         return crcCell;

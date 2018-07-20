@@ -82,7 +82,38 @@ EOSQL
             'TREE'
         );
 EOSQL
+
+    # add medco resource local using default credentials
+    psql $PSQL_PARAMS -d $IRCT_DB_NAME <<-EOSQL
+        select add_i2b2_medco_resource(
+            'i2b2-medco-local',
+            'http://i2b2-medco-srv0:8080/i2b2/services/,http://i2b2-medco-srv1:8080/i2b2/services/,http://i2b2-medco-srv2:8080/i2b2/services/',
+            'i2b2medcosrv0,i2b2medcosrv1,i2b2medcosrv2',
+            'demo',
+            'demouser',
+            'true',
+            'false',
+            'edu.harvard.hms.dbmi.bd2k.irct.ri.medco.I2B2MedCoResourceImplementation',
+            'TREE'
+        );
+EOSQL
+
+    # add medco resource local using default credentials
+    psql $PSQL_PARAMS -d $IRCT_DB_NAME <<-EOSQL
+        select add_i2b2_medco_resource(
+            'i2b2-medco-local-jwt',
+            'http://i2b2-medco-srv0:8080/i2b2/services/,http://i2b2-medco-srv1:8080/i2b2/services/,http://i2b2-medco-srv2:8080/i2b2/services/',
+            'i2b2medcosrv0,i2b2medcosrv1,i2b2medcosrv2',
+            '',
+            '',
+            'true',
+            'true',
+            'edu.harvard.hms.dbmi.bd2k.irct.ri.medco.I2B2MedCoResourceImplementation',
+            'TREE'
+        );
+EOSQL
 fi
+
 
 # set admin password & run wildfly
 $JBOSS_HOME/bin/add-user.sh admin $WILDFLY_ADMIN_PASSWORD --silent || true

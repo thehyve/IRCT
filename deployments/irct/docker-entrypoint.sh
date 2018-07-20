@@ -28,6 +28,7 @@ EOSQL
     psql $PSQL_PARAMS -d $IRCT_DB_NAME -f "$IRCT_SQL_DIR/db_structure_dump_1.4.sql"
     psql $PSQL_PARAMS -d $IRCT_DB_NAME -f "$IRCT_SQL_DIR/dataconverterimplementations.sql"
     psql $PSQL_PARAMS -d $IRCT_DB_NAME -f "$IRCT_SQL_DIR/i2b2_resource_function.sql"
+    psql $PSQL_PARAMS -d $IRCT_DB_NAME -f "$IRCT_SQL_DIR/medco_resource_function.sql"
 
     # add i2b2 resource with default credentials
     psql $PSQL_PARAMS -d $IRCT_DB_NAME <<-EOSQL

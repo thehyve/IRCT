@@ -393,7 +393,7 @@ public enum PrimitiveDataType implements DataType {
 				return new byte[] { (byte) Character.MIN_VALUE };
 			}
 			String data = ((String) value).trim();
-			return (data).getBytes(StandardCharsets.UTF_16LE);
+			return (data).getBytes(StandardCharsets.UTF_16);
 		}
 
 		@Override
@@ -402,7 +402,7 @@ public enum PrimitiveDataType implements DataType {
 					&& (bytes[0] == Character.reverseBytes(Character.MIN_VALUE))) {
 				return null;
 			}
-			return new String(bytes, StandardCharsets.UTF_16LE).trim();
+			return new String(bytes, StandardCharsets.UTF_16).trim();
 		}
 
 		@Override
@@ -501,7 +501,7 @@ public enum PrimitiveDataType implements DataType {
 			}
 
 			String data = ((String) value).trim();
-			return (data).getBytes(StandardCharsets.UTF_16LE);
+			return (data).getBytes(StandardCharsets.UTF_16);
 		}
 
 		@Override
@@ -511,7 +511,7 @@ public enum PrimitiveDataType implements DataType {
 				return null;
 			}
 
-			return new String(bytes, StandardCharsets.UTF_16LE).trim();
+			return new String(bytes, StandardCharsets.UTF_16).trim();
 		}
 
 		@Override

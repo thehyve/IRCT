@@ -20,11 +20,13 @@ import edu.harvard.hms.dbmi.i2b2.api.crc.CRCCell;
 import edu.harvard.hms.dbmi.i2b2.api.crc.xml.psm.*;
 import edu.harvard.hms.dbmi.i2b2.api.ont.ONTCell;
 import edu.harvard.hms.dbmi.i2b2.api.pm.PMCell;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.log4j.Logger;
 
 import javax.xml.bind.JAXBException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -205,7 +207,9 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
                         String queryId = mirrt.getQueryResultInstance().get(0).getQueryInstanceId();
                         resourceActionIds[fI] = fProjectId + "|" + queryId + "|" + resultId;
 
-                        frs.updateString("medco_results_" + fI, medcoJsonResult);
+                        // todo: this should be done in a cleaner way
+                        String encodedResults = Base64.encodeBase64String(medcoJsonResult.getBytes(StandardCharsets.US_ASCII));
+                        frs.updateString("medco_results_" + fI, encodedResults);
 
                     } catch (Exception e) {
                         logger.error(getType()+".runQuery() "+e.getMessage()+" "+e);

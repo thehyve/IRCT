@@ -107,6 +107,7 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
     }
 
     protected CRCCell createMedCoCell(int resourceURLIdx, String projectId, String userName, String jwt) {
+        CRCCell crcCell = new CRCCell();
         if (this.useProxy) {
             crcCell.setupConnection(this.medcoCellsURL.get(resourceURLIdx), this.domains.get(resourceURLIdx), userName,
                     "", projectId, this.useProxy, this.proxyURL + "/MedCoQueryService");

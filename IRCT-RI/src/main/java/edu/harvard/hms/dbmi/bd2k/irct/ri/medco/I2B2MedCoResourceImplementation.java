@@ -182,6 +182,7 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
         final CountDownLatch latch = new CountDownLatch(this.medcoCellsURL.size());
         final String[] resourceActionIds = new String[this.medcoCellsURL.size()];
         final HttpClient client = createClient(user);
+        final String queryName = "IRCT_MedCo_query_" + result.getId() + "_" + System.currentTimeMillis();
 
         for (int i = 0; i < this.medcoCellsURL.size() ; i++) {
             final int fI = i;
@@ -196,7 +197,7 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
                         logger.debug("MedCo thread " + fI + ": creating cell client");
                         CRCCell crcCell = createMedCoCell(fI, fProjectId, user.getName(), user.getToken());
                         MasterInstanceResultResponseType mirrt = crcCell.runQueryInstanceFromQueryDefinition(client, null, null,
-                                "IRCT MedCo", null, "ANY", 0, roolt, panels.toArray(new PanelType[0]));
+                                queryName, null, "ANY", 0, roolt, panels.toArray(new PanelType[0]));
 
                         // extract the results
                         String medcoJsonResult = mirrt.getQueryResultInstance().get(0).getDescription();

@@ -65,6 +65,9 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
         super.setup(parameters);
         this.medcoCellsURL.addAll(Arrays.asList(this.resourceURL.split(SEPARATOR)));
         this.domains.addAll(Arrays.asList(this.domain.split(SEPARATOR)));
+        for (int i = 0 ; i < this.medcoCellsURL.size() ; i++) {
+            logger.info("MedCo cell " + i + " set: " + this.medcoCellsURL.get(i) + " (" + this.domains.get(i) + ")");
+        }
         // first entry used for ontology querying
     }
 
@@ -189,6 +192,7 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
 
                     try {
                         // run the query
+                        logger.debug("MedCo thread " + fI + ": creating cell client");
                         CRCCell crcCell = createMedCoCell(fI, fProjectId, user.getName(), user.getToken());
                         MasterInstanceResultResponseType mirrt = crcCell.runQueryInstanceFromQueryDefinition(client, null, null,
                                 "IRCT MedCo", null, "ANY", 0, roolt, panels.toArray(new PanelType[0]));
@@ -243,5 +247,10 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
     @Override
     public Result getResults(final User user, final Result result) throws ResourceInterfaceException {
         return result;
+    }
+
+    @Override
+    public String getType() {
+        return "i2b2MedCoXML";
     }
 }

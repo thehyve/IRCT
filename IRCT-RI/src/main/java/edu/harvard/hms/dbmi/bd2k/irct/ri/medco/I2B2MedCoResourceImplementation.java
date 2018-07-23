@@ -155,6 +155,18 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
             return result;
         }
 
+        // hackish workaround: the encrypted value in base64 just got its '/' turned into '\' -> reverse that
+        // todo: use base64URL in unlynx (server + loader + client js)
+        for (PanelType panel: panels) {
+            for (ItemType item: panel.getItem()) {
+                String prefix = "\\\\ENCRYPTED_KEY\\";
+                if (item.getItemKey().startsWith(prefix)) {
+                    String encVal = item.getItemKey().substring(prefix.length());
+                    item.setItemKey(prefix + encVal.replace('\\', '/'));
+                }
+            }
+        }
+
         final ResultOutputOptionListType roolt = new ResultOutputOptionListType();
         ResultOutputOptionType root = new ResultOutputOptionType();
         root.setPriorityIndex(10);

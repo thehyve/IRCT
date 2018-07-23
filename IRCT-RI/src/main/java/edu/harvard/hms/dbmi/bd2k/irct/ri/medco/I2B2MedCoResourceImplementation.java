@@ -155,6 +155,12 @@ public class I2B2MedCoResourceImplementation extends I2B2XMLResourceImplementati
             return result;
         }
 
+        // todo: another hack
+        // the projectId extracted before is "MedCo", which should be used for the ontology browsing
+        // for the query, the projectId to use is the one that contains the observation_fact we want to query
+        // for now it is the default project from the i2b2 demo data
+        projectId = "Demo";
+
         // hackish workaround: the encrypted value in base64 just got its '/' turned into '\' -> reverse that
         // todo: use base64URL in unlynx (server + loader + client js)
         for (PanelType panel: panels) {

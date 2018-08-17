@@ -111,7 +111,6 @@ public class I2B2XMLResourceImplementation
 	protected List<String> sourceWhiteList;
 
 	protected boolean useJWT;
-	// todo: add in resource and update resource with new version
 
 	protected ResourceState resourceState;
 
@@ -1274,7 +1273,7 @@ public class I2B2XMLResourceImplementation
      * @param attributes map in which to insert the values
      * @return CSV of enum values
      */
-	private int addEnumValues(Map<String, String> attributes, ConceptType concept) {
+	private int addEnumValues(Map<String, Object> attributes, ConceptType concept) {
         edu.harvard.hms.dbmi.i2b2.api.ont.xml.XmlValueType metadataXml = concept.getMetadataxml();
         if (metadataXml == null) {
             return 0;

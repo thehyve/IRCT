@@ -34,8 +34,6 @@ services:
       - POSTGRES_PORT_5432_TCP_ADDR=postgresql
     ports:
       - "8081:8080"
-    depends_on:
-      - postgresql
     networks:
       - db-network
 

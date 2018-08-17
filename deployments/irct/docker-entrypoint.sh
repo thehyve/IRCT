@@ -99,7 +99,7 @@ EOSQL
         );
 EOSQL
 
-    # add medco resource local using default credentials
+    # add medco resource local JWT authentication
     psql $PSQL_PARAMS -d $IRCT_DB_NAME <<-EOSQL
         select add_i2b2_medco_resource(
             'i2b2-medco-local-jwt',

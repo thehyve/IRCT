@@ -553,9 +553,6 @@ public class I2B2XMLResourceImplementation
 			result.setMessage("runQuery() Exception:"+e.getMessage());
 		}
 
-		// when getting the result, the project ID is needed to make PDO query with dynamic authentication
-		result.getMetaData().put("projectId", projectId);
-
 		ResultOutputOptionListType roolt = new ResultOutputOptionListType();
 
 
@@ -628,6 +625,7 @@ public class I2B2XMLResourceImplementation
 
 			HttpClient client = createClient(user);
 			String resultInstanceId = result.getResourceActionId();
+			String projectId = resultInstanceId.split("\\|")[0];
 			String resultId = resultInstanceId.split("\\|")[2];
 
 			// Get PDO List
@@ -640,7 +638,6 @@ public class I2B2XMLResourceImplementation
 
 			int min = 0;
 
-			String projectId = (String) result.getMetaData().get("projectId");
 			crcCell = createCRCCell(projectId, user.getName(), user.getToken());
 
 			while( pdrt == null){
@@ -825,23 +822,13 @@ public class I2B2XMLResourceImplementation
 
 		item.setItemIsSynonym(false);
 		if (whereClause.getPredicateType() != null) {
-			switch (whereClause.getPredicateType().getName()) {
-				case "CONSTRAIN_MODIFIER":
-					item.setConstrainByModifier(createConstrainByModifier(whereClause));
-					break;
-
-				case "CONSTRAIN_VALUE":
-					item.getConstrainByValue().add(
-							createConstrainByValue(whereClause, whereClause.getField().getDataType()));
-					break;
-
-				case "CONSTRAIN_DATE":
-					item.getConstrainByDate().add(createConstrainByDate(whereClause));
-					break;
-
-				case "NO_CONSTRAIN":
-
-
+			if (whereClause.getPredicateType().getName().equals("CONSTRAIN_MODIFIER")) {
+				item.setConstrainByModifier(createConstrainByModifier(whereClause));
+			} else if (whereClause.getPredicateType().getName().equals("CONSTRAIN_VALUE")) {
+				item.getConstrainByValue()
+						.add(createConstrainByValue(whereClause, whereClause.getField().getDataType()));
+			} else if (whereClause.getPredicateType().getName().equals("CONSTRAIN_DATE")) {
+				item.getConstrainByDate().add(createConstrainByDate(whereClause));
 			}
 		}
 		return item;
@@ -1395,6 +1382,7 @@ public class I2B2XMLResourceImplementation
             int nbCatValAdded = addEnumValues(attributes, concept);
             logger.debug("Added " + nbCatValAdded + " categorical values to " + returnEntity.getPui());
 			// todo: numeric aggregate values?
+			// todo: we can add quite some info from the xml metadate info (units, boundaries, etc.)
 
 			returnEntity.setAttributes(attributes);
 			returns.add(returnEntity);
@@ -1402,11 +1390,6 @@ public class I2B2XMLResourceImplementation
 
 		return returns;
 	}
-
-
-// todo: server side: <entire_patient_set >true</entire_patient_set> (on PDO) i2b2
-    // take it into acount only if there is only the true (if more things: nope)
-
 
     private List<Entity> convertModifiersTypeToEntities(String basePath, ModifiersType modifiersType)
 			throws UnsupportedEncodingException {

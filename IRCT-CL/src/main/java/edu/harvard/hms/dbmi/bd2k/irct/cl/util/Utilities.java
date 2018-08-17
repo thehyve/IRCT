@@ -58,9 +58,6 @@ public class Utilities {
 		return jwkProvider;
 	}
 
-
-
-
 	/**
 	 * Returns all the first values from a MultiValue Map
 	 * 
@@ -104,13 +101,14 @@ public class Utilities {
 	/**
 	 * extract specific user field from JWT token
 	 * @param req
+	 * @param clientSecret
 	 * @param pJwksUri
 	 * @param userField specifies which user field is going to be extracted from JWT token
 	 * @return
 	 * @throws NotAuthorizedException
 	 */
 	public static String extractEmailFromJWT(HttpServletRequest req, String clientSecret, String pJwksUri, String userField) {
-		logger.debug("extractEmailFromJWT() with jwks URI:" + pJwksUri);
+		logger.debug("extractEmailFromJWT() with secret:"+clientSecret+" and jwks URI:" + pJwksUri);
 
 		//No point in doing anything if there's no userField
         if (userField == null){

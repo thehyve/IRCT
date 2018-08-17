@@ -29,12 +29,6 @@ public class SessionFilter implements Filter {
 	@Inject
 	private IRCTApplication irctApp;
 
-	@javax.annotation.Resource(mappedName = "java:global/client_id")
-	private String clientId;
-
-	@javax.annotation.Resource(mappedName = "java:global/client_secret")
-	private String clientSecret;
-
 	@javax.annotation.Resource(mappedName = "java:global/jwks_uri")
 	private String jwksUri;
 

@@ -14,7 +14,9 @@ ENV IRCT_OIDC_ADDR="keycloak" \
     IRCT_KEY_TIMEOUT="720" \
     IRCT_WHITELIST_FILE="false" \
     IRCT_RESULT_DATA_FOLDER="/opt/jboss/irct-results" \
-    IRCT_OIDC_JWKS_ADDR="http://keycloak:8080/auth/realms/master/protocol/openid-connect/certs"
+    IRCT_OIDC_JWKS_ADDR="http://keycloak:8080/auth/realms/master/protocol/openid-connect/certs" \
+    IRCT_CLIENT_SECRET="nosecret" \
+    IRCT_CORS_ALLOW_ORIGIN="http://localhost:4200"
 ENV WILDFLY_ADMIN_PASSWORD="admin"
 
 # build-time variables

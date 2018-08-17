@@ -1,4 +1,4 @@
-CREATE FUNCTION add_i2b2_resource(
+CREATE OR REPLACE FUNCTION add_i2b2_resource(
   resourceName varchar,
   resourceURL varchar,
   transmartURL varchar,

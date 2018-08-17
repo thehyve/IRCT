@@ -61,6 +61,8 @@ services:
       - IRCT_RESULT_DATA_FOLDER=/opt/jboss/irct-results
       - IRCT_OIDC_JWKS_ADDR=http://keycloak:8080/auth/realms/master/protocol/openid-connect/certs
       - WILDFLY_ADMIN_PASSWORD=admin
+      - IRCT_CLIENT_SECRET=nosecret
+      - IRCT_CORS_ALLOW_ORIGIN=http://localhost:4200
     volumes:
       - ../:/irct-src
       - mvn-repo:/opt/jboss/.m2/repository

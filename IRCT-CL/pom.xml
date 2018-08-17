@@ -76,8 +76,14 @@
 
 		<dependency>
 			<groupId>com.auth0</groupId>
+			<artifactId>auth0-servlet</artifactId>
+			<version>2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
-			<version>3.2.0</version>
+			<version>3.4.0</version>
 		</dependency>
 
 		<dependency>
@@ -85,6 +91,13 @@
 			<artifactId>jwks-rsa</artifactId>
 			<version>0.3.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.11</version>
+		</dependency>
+
 		<!-- Apache Commons CSV -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -329,14 +342,14 @@
 											<version>${version.wildfly}</version>
 											<type>zip</type>
 											<overWrite>false</overWrite>
-											<!-- Placing the widlfly distribution in the same target folder as the war files causes wildfly
+											<-Placing the widlfly distribution in the same target folder as the war files causes wildfly
 											startup issues if the deployments directory is linked to the target folder, e.g.
 											
 											ERROR [org.jboss.as.server.deployment.scanner] (DeploymentScanner-threads - 1) 
 											WFLYDS0011: The deployment scanner found a directory named META-INF that was 
 											not inside a directory whose name ends with .ear, .jar, .rar, .sar or .war. 
 											This is likely the result of unzipping an archive directly inside the 
-											/opt/jboss/wildfly/standalone/deployments directory, which is a user error. -->
+											/opt/jboss/wildfly/standalone/deployments directory, which is a user error. ->
 											<outputDirectory>${wildfly.dist}</outputDirectory>
 										</artifactItem>
 									</artifactItems>

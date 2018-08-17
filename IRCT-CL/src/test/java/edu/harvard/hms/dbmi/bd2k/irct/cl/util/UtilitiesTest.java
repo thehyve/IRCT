@@ -51,23 +51,23 @@ public class UtilitiesTest {
         when(req.getHeader("Authorization")).thenReturn("Bearer " + validToken);
 
         //Fake field should return null
-        String result = cut.extractEmailFromJWT(req, clientSecret, userField);
+        String result = cut.extractEmailFromJWT(req, clientSecret, null, userField);
         assertNull(result);
 
-        result = cut.extractEmailFromJWT(req, clientSecret, "sub");
+        result = cut.extractEmailFromJWT(req, clientSecret, null, "sub");
         assertNotNull(result);
         assertEquals(result, "samlp|test@email.com");
 
-        result = cut.extractEmailFromJWT(req, clientSecret, "email");
+        result = cut.extractEmailFromJWT(req, clientSecret, null, "email");
         assertNotNull(result);
         assertEquals(result, "test@email.com");
 
         //Missing userField should return null
-        result = cut.extractEmailFromJWT(req, clientSecret, null);
+        result = cut.extractEmailFromJWT(req, clientSecret, null, null);
         assertNull(result);
 
         try {
-            result = cut.extractEmailFromJWT(req, "invalidClientSecret", "email");
+            result = cut.extractEmailFromJWT(req, "invalidClientSecret", null, "email");
             //It shouldn't have gotten past here
             fail();
         } catch (Exception e){
@@ -79,7 +79,7 @@ public class UtilitiesTest {
         String invalidToken = validToken.replaceAll("y", "X");
         when(req.getHeader("Authorization")).thenReturn("Bearer " + invalidToken);
         try {
-            result = cut.extractEmailFromJWT(req, clientSecret, "email");
+            result = cut.extractEmailFromJWT(req, clientSecret, null, "email");
             //It shouldn't have gotten past here
             fail();
         } catch (Exception e){

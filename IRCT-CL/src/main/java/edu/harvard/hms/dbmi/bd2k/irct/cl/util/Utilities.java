@@ -109,7 +109,7 @@ public class Utilities {
 	 * @return
 	 * @throws NotAuthorizedException
 	 */
-	public static String extractEmailFromJWT(HttpServletRequest req, String pJwksUri, String userField) {
+	public static String extractEmailFromJWT(HttpServletRequest req, String clientSecret, String pJwksUri, String userField) {
 		logger.debug("extractEmailFromJWT() with jwks URI:" + pJwksUri);
 
 		//No point in doing anything if there's no userField
@@ -130,21 +130,46 @@ public class Utilities {
 		try {
 			logger.debug("validateAuthorizationHeader() validating with un-decoded secret.");
 			jwt = com.auth0.jwt.JWT.decode(tokenString);
-			Jwk jwk = getJwkProvider(pJwksUri).get(jwt.getKeyId());
-			RSAPublicKey signingPubKey = (RSAPublicKey) jwk.getPublicKey();
 
-			if (signingPubKey == null || !jwk.getAlgorithm().equals("RS256")) {
-				throw new NotAuthorizedException("Problematic public key = " + signingPubKey + ", algo = " + jwk.getAlgorithm());
+			if (jwt.getAlgorithm().equals("RS256")) {
+				Jwk jwk = getJwkProvider(pJwksUri).get(jwt.getKeyId());
+				RSAPublicKey signingPubKey = (RSAPublicKey) jwk.getPublicKey();
+
+				if (signingPubKey == null) {
+					throw new NotAuthorizedException("Problematic public key (null)");
+				}
+
+				jwt = com.auth0.jwt.JWT
+						.require(Algorithm.RSA256(signingPubKey, null))
+						.build()
+						.verify(tokenString);
+
+			} else if (jwt.getAlgorithm().equals("HS256")) {
+				jwt = com.auth0.jwt.JWT.require(Algorithm
+						.HMAC256(clientSecret
+								.getBytes("UTF-8")))
+						.build()
+						.verify(tokenString);
+			} else {
+				throw new NotAuthorizedException("Problematic signature algorithm = " + jwt.getAlgorithm());
 			}
 
-			jwt = com.auth0.jwt.JWT
-					.require(Algorithm.RSA256(signingPubKey, null))
-					.build()
-					.verify(tokenString);
-
-		} catch (JWTVerificationException | MalformedURLException | JwkException e){
-			logger.error("extractEmailFromJWT() error: " + e.getMessage());
-			throw new NotAuthorizedException("Token is invalid, please request a new one: " + e.getMessage());
+		} catch (UnsupportedEncodingException | MalformedURLException | JwkException e){
+			logger.error("extractEmailFromJWT() error decoding token: " + e.getMessage());
+			throw new NotAuthorizedException("Token is invalid, please request a new one");
+		} catch (JWTVerificationException e) {
+			try{
+				if (jwt != null && jwt.getAlgorithm().equals("HS256")) {
+					jwt = com.auth0.jwt.JWT.require(Algorithm
+							.HMAC256(Base64.decodeBase64(clientSecret
+									.getBytes("UTF-8"))))
+							.build()
+							.verify(tokenString);
+				}
+			} catch (UnsupportedEncodingException | JWTVerificationException ex){
+				logger.error("extractEmailFromJWT() getting bytes for initialize jwt token algorithm error: " + e.getMessage());
+				throw new NotAuthorizedException("Token is invalid, please request a new one");
+			}
 		}
 
 		logger.debug("extractEmailFromJWT() validation is successful.");

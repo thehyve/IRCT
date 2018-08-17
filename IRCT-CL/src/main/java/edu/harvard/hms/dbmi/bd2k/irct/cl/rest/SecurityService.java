@@ -46,16 +46,18 @@ public class SecurityService implements Serializable {
 	@Inject
 	private HttpSession session;
 
-//	@javax.annotation.Resource(mappedName ="java:global/redirect_on_success")
-//	private String redirectOnSuccess;
-//
-//	@javax.annotation.Resource(mappedName ="java:global/domain")
-//	private String domain;
+	@javax.annotation.Resource(mappedName ="java:global/redirect_on_success")
+	private String redirectOnSuccess;
 
-//	@javax.annotation.Resource(mappedName ="java:global/client_id")
-//	private String clientId;
+	@javax.annotation.Resource(mappedName ="java:global/domain")
+	private String domain;
 
-	// todo: get this from the openid-configuration
+	@javax.annotation.Resource(mappedName ="java:global/client_id")
+	private String clientId;
+
+	@javax.annotation.Resource(mappedName ="java:global/client_secret")
+	private String clientSecret;
+
 	@javax.annotation.Resource(mappedName ="java:global/jwks_uri")
 	private String jwksUri;
 
@@ -75,7 +77,7 @@ public class SecurityService implements Serializable {
 
 		try {
 			User userObject = sc.ensureUserExists(Utilities
-					.extractEmailFromJWT(req, this.jwksUri, this.userField));
+					.extractEmailFromJWT(req, this.clientSecret, this.jwksUri, this.userField));
 			logger.debug("/createKey user exists");
 			userObject.setToken(Utilities.extractToken(req));
 

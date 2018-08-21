@@ -1,10 +1,17 @@
 version: '2.2'
 services:
+  livyhail:
+    image: jgeofil/livyhail:latest
+    ports:
+    - "8998:8998"
+    networks:
+    - db-network
+
   lighttpd:
     build:
       context: ./lighttpd/
     ports:
-      - "80:80"
+      - "81:81"
     networks:
       - db-network
 

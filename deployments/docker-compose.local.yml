@@ -11,7 +11,7 @@ services:
     build:
       context: ./lighttpd/
     ports:
-      - "81:81"
+      - "80:80"
     networks:
       - db-network
 

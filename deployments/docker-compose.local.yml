@@ -6,6 +6,8 @@ services:
     - "8998:8998"
     networks:
     - db-network
+    volumes:
+    - ./hail/data:/app/data
 
   lighttpd:
     build:

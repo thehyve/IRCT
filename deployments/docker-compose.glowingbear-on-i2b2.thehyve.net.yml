@@ -23,8 +23,8 @@ services:
       - IRCT_KEY_TIMEOUT=720
       - IRCT_WHITELIST_FILE=false
       - IRCT_OIDC_JWKS_ADDR=https://keycloak-dwh-test.thehyve.net/auth/realms/transmart-dev/protocol/openid-connect/certs
-      - IRCT_CORS_ALLOW_ORIGIN=https://glowingbear-on-i2b2.thehyve.net
-
+      - CORS_ENABLED=true
+      - CORS_ALLOW_ORIGIN=https://glowingbear-on-i2b2.thehyve.net
   i2b2:
     extends:
       file: docker-compose.local.yml

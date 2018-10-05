@@ -322,7 +322,8 @@
                 <simple name="java:global/resultDataFolder" value="${env.IRCT_RESULT_DATA_FOLDER:scratch/irct}" type="java.lang.String"/>
                 <simple name="java:global/jwks_uri" value="${env.IRCT_OIDC_JWKS_ADDR:http://keycloak:8080/auth/realms/master/protocol/openid-connect/certs}" type="java.lang.String"/>
                 <simple name="java:global/client_secret" value="${env.IRCT_CLIENT_SECRET:nosecret}" type="java.lang.String"/>
-                <simple name="java:global/cors_allow_origin" value="${env.IRCT_CORS_ALLOW_ORIGIN:http://localhost:4200}" type="java.lang.String"/>
+                <simple name="java:global/cors_enabled" value="${env.CORS_ENABLED:false}" type="boolean" />
+                <simple name="java:global/cors_allow_origin" value="${env.CORS_ALLOW_ORIGIN}" type="java.lang.String"/>
             </bindings>
             <remote-naming/>
         </subsystem>
